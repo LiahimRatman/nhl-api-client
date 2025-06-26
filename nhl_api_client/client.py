@@ -1157,45 +1157,19 @@ class NHLAPIClient:
             'start': 0
         }
         
-        data = self._make_request(url, params)
-        
-        if 'data' not in data:
-            print("Failed to get power play skater data")
-            return pd.DataFrame()
-        
-        df = pd.DataFrame(data['data'])
-        if not df.empty:
-            df['season'] = season
-            print(f"Successfully retrieved {len(df)} power play skater records")
-        
-        return df
-
-
-def main():
-    """Example usage of the NHL API client"""
-    client = NHLAPIClient()
-    
-    # Get all teams
-    print("Getting NHL teams...")
-    teams = client.get_teams()
-    if 'data' in teams:
-        active_teams = [team for team in teams['data'] if team.get('leagueId') == 133]
-        print(f"Found {len(active_teams)} active NHL teams")
-    
-    # Get top scorers for current season
-    print("\nGetting top 10 scorers...")
-    top_scorers = client.get_top_scorers(limit=10)
-    if not top_scorers.empty:
-        display_cols = ['firstName', 'lastName', 'teamAbbrevs', 'goals', 'assists', 'points']
-        available_cols = [col for col in display_cols if col in top_scorers.columns]
-        print(top_scorers[available_cols].to_string(index=False))
-    
-    # Search for a specific player
-    print("\nSearching for 'McDavid'...")
-    players = client.search_player("McDavid")
-    for player in players[:3]:  # Show first 3 results
-        print(f"{player['name']} - {player['team']} ({player['position']}) - {player['points']} pts")
-
-
-if __name__ == "__main__":
-    main() 
+        try:
+            data = self._make_request(url, params)
+            
+            if 'data' not in data:
+                print("Failed to get power play skater data")
+                return pd.DataFrame()
+            
+            df = pd.DataFrame(data['data'])
+            if not df.empty:
+                df['season'] = season
+                print(f"Successfully retrieved {len(df)} power play skater records")
+            
+            return df
+        except Exception as e:
+            print(f"Error fetching skater powerplay stats: {e}")
+            return pd.DataFrame() 
