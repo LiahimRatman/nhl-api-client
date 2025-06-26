@@ -1,0 +1,10 @@
+include README.md
+include LICENSE
+include requirements.txt
+include pyproject.toml
+recursive-include nhl_api_client *.py
+recursive-include examples *.py
+global-exclude *.pyc
+global-exclude __pycache__
+global-exclude .DS_Store
+global-exclude *.so 
