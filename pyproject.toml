@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "nhl-api-client"
+name = "nhl-stats-api-client"
 version = "1.0.0"
 description = "A comprehensive Python client for accessing NHL statistics and data"
 readme = "README.md"
@@ -28,7 +28,6 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
-    "Topic :: Sports",
 ]
 requires-python = ">=3.8"
 dependencies = [

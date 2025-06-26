@@ -14,7 +14,7 @@ with open("requirements.txt", "r", encoding="utf-8") as fh:
     requirements = [line.strip() for line in fh if line.strip() and not line.startswith("#")]
 
 setup(
-    name="nhl-api-client",
+    name="nhl-stats-api-client",
     version="1.0.0",
     author="Mikhail Korotkov",
     author_email="ma.korotkov.eu@gmail.com",
@@ -26,7 +26,6 @@ setup(
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
-        "Intended Audience :: Sports/Hockey Analytics",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3",
@@ -37,7 +36,6 @@ setup(
         "Programming Language :: Python :: 3.12",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
-        "Topic :: Sports",
         "Topic :: Scientific/Engineering :: Information Analysis",
     ],
     python_requires=">=3.8",
