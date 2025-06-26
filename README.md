@@ -1,4 +1,4 @@
-# NHL API Client
+# NHL Stats API Client
 
 A comprehensive Python client for accessing NHL statistics and data through various official NHL APIs. This library provides easy access to player stats, team information, schedules, standings, and more.
 
@@ -9,31 +9,30 @@ A comprehensive Python client for accessing NHL statistics and data through vari
 - 🏆 **Team Data**: Get team statistics, power play/penalty kill data, and faceoff percentages
 - 📅 **Schedule & Standings**: Access current schedules, standings, and game information
 - 🎯 **Advanced Analytics**: Built-in support for advanced statistical analysis
-- 📊 **Data Export**: Export data to CSV, JSON, and Excel formats
+- 📊 **Data Export**: Export data to CSV and JSON formats
 - 🚀 **Easy to Use**: Simple, intuitive API with comprehensive error handling
 
 ## Installation
 
-### From PyPI (when published)
+### From PyPI
 
 ```bash
-pip install nhl-api-client
+pip install nhl-stats-api-client
 ```
 
 ### From Source
 
 ```bash
-git clone https://github.com/yourusername/nhl-api-client.git
+git clone https://github.com/liahimratman/nhl-api-client.git
 cd nhl-api-client
 pip install -e .
 ```
 
 ### Requirements
 
-- Python 3.7+
+- Python 3.8+
 - pandas
 - requests
-- openpyxl (for Excel export)
 
 ## Quick Start
 
@@ -42,6 +41,10 @@ from nhl_api_client import NHLAPIClient
 
 # Initialize the client
 client = NHLAPIClient()
+
+# Get all NHL teams
+teams = client.get_teams()
+print(f"Found {len(teams['data'])} teams")
 
 # Get player stats for Connor McDavid (2023-24 season)
 player_stats = client.get_player_season_stats(8478402, "20232024")
@@ -59,6 +62,17 @@ top_scorers.to_csv("top_scorers.csv", index=False)
 ```
 
 ## API Reference
+
+### Team Information
+
+```python
+# Get all NHL teams
+teams = client.get_teams()
+print(f"Teams: {teams['data']}")
+
+# Get team roster
+roster = client.get_team_roster("TOR")  # Toronto Maple Leafs
+```
 
 ### Player Statistics
 
@@ -159,9 +173,6 @@ date_schedule = client.get_schedule_by_date("2024-01-15")
 
 # Get team's full season schedule
 team_schedule = client.get_club_schedule("TOR")  # Toronto Maple Leafs
-
-# Get team roster
-roster = client.get_team_roster("TOR")
 ```
 
 ### Game Data
@@ -216,7 +227,7 @@ print(pp_stats_sorted[['teamFullName', 'powerPlayPct', 'powerPlayGoals']].head()
 ### Example 3: Export Data
 
 ```python
-# Export comprehensive player data to Excel
+# Export comprehensive player data to CSV and JSON
 import pandas as pd
 
 # Get various stats
@@ -224,11 +235,13 @@ summary = client.get_skater_stats_by_season("20232024", limit=500)
 realtime = client.get_skater_realtime_stats("20232024", limit=500)
 powerplay = client.get_skater_powerplay_stats("20232024", limit=500)
 
-# Create Excel file with multiple sheets
-with pd.ExcelWriter('nhl_stats_2023-24.xlsx') as writer:
-    summary.to_excel(writer, sheet_name='Summary', index=False)
-    realtime.to_excel(writer, sheet_name='RealTime', index=False)
-    powerplay.to_excel(writer, sheet_name='PowerPlay', index=False)
+# Export to CSV
+summary.to_csv('summary_stats.csv', index=False)
+realtime.to_csv('realtime_stats.csv', index=False)
+powerplay.to_csv('powerplay_stats.csv', index=False)
+
+# Export to JSON
+summary.to_json('summary_stats.json', orient='records')
 ```
 
 ### Example 4: Schedule Analysis
@@ -244,6 +257,26 @@ if schedule and 'gameWeek' in schedule:
                 away = game['awayTeam']['placeName']['default']
                 home = game['homeTeam']['placeName']['default']
                 print(f"{away} @ {home}")
+```
+
+### Example 5: Team Roster Analysis
+
+```python
+# Get all teams and their rosters
+teams = client.get_teams()
+
+for team in teams['data']:
+    team_abbrev = team['triCode']
+    team_name = team['fullName']
+    
+    print(f"\n{team_name} ({team_abbrev}) Roster:")
+    roster = client.get_team_roster(team_abbrev)
+    
+    # Print forwards
+    if 'forwards' in roster:
+        print("  Forwards:")
+        for player in roster['forwards'][:5]:  # First 5 forwards
+            print(f"    {player['firstName']['default']} {player['lastName']['default']}")
 ```
 
 ## Season ID Format
@@ -302,6 +335,16 @@ This library is not officially affiliated with the NHL. It provides access to pu
 
 ## Changelog
 
+### Version 1.0.2
+- Removed unnecessary main() function from library
+- Fixed build process with correct configuration files
+- Clean, reliable build process established
+- Updated package name to `nhl-stats-api-client`
+- Removed openpyxl dependency (no longer needed)
+
+### Version 1.0.1
+- Updated dependencies and configuration
+
 ### Version 1.0.0
 - Initial release
 - Complete player statistics support
@@ -316,7 +359,7 @@ This library is not officially affiliated with the NHL. It provides access to pu
 If you encounter any issues or have questions:
 
 1. Check the [examples](examples/) directory
-2. Open an issue on GitHub
+2. Open an issue on GitHub: https://github.com/liahimratman/nhl-api-client/issues
 3. Read the API documentation above
 
 ## Acknowledgments
