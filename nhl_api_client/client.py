@@ -307,6 +307,33 @@ class NHLAPIClient:
         
         return df
 
+    def get_skater_bios(self, season: str = "20232024", limit: int = 100) -> pd.DataFrame:
+        """
+        Get skater biographical information
+        
+        Args:
+            season: Season in format '20232024'
+            limit: Maximum number of players to fetch
+        """
+        url = f"{self.stats_url}/skater/bios"
+        params = {
+            'cayenneExp': f'seasonId={season}',
+            'limit': limit,
+            'start': 0
+        }
+        
+        data = self._make_request(url, params)
+        
+        if 'data' not in data:
+            print("Failed to get skater bios data")
+            return pd.DataFrame()
+        
+        df = pd.DataFrame(data['data'])
+        if not df.empty:
+            df['season'] = season
+        
+        return df
+
     # =============================================================================
     # GOALIE STATS ENDPOINTS
     # =============================================================================
@@ -844,6 +871,57 @@ class NHLAPIClient:
         }
         return self._make_request(url, params)
     
+    def get_player_penaltykill_stats(self, player_id: int, season: str = "20232024") -> Dict:
+        """
+        Get player penalty kill statistics
+        
+        Args:
+            player_id: NHL player ID  
+            season: Season in format '20232024'
+        
+        Returns:
+            Dictionary with player penalty kill stats
+        """
+        url = f"{self.stats_url}/skater/penaltykill"
+        params = {
+            'cayenneExp': f'playerId={player_id} and seasonId={season}'
+        }
+        return self._make_request(url, params)
+    
+    def get_player_shootout_stats(self, player_id: int, season: str = "20232024") -> Dict:
+        """
+        Get player shootout statistics
+        
+        Args:
+            player_id: NHL player ID  
+            season: Season in format '20232024'
+        
+        Returns:
+            Dictionary with player shootout stats
+        """
+        url = f"{self.stats_url}/skater/shootout"
+        params = {
+            'cayenneExp': f'playerId={player_id} and seasonId={season}'
+        }
+        return self._make_request(url, params)
+    
+    def get_player_timeonice_stats(self, player_id: int, season: str = "20232024") -> Dict:
+        """
+        Get player time on ice statistics
+        
+        Args:
+            player_id: NHL player ID  
+            season: Season in format '20232024'
+        
+        Returns:
+            Dictionary with player time on ice stats
+        """
+        url = f"{self.stats_url}/skater/timeonice"
+        params = {
+            'cayenneExp': f'playerId={player_id} and seasonId={season}'
+        }
+        return self._make_request(url, params)
+    
     def get_comprehensive_player_stats(self, player_id: int, season: str = "20232024") -> Dict:
         """
         Get comprehensive player statistics from multiple endpoints
@@ -864,7 +942,10 @@ class NHLAPIClient:
             'bios': self.get_player_bios,
             'powerplay': self.get_player_powerplay_stats,
             'penalties': self.get_player_penalty_stats,
-            'faceoffs': self.get_player_faceoff_stats
+            'faceoffs': self.get_player_faceoff_stats,
+            'penaltykill': self.get_player_penaltykill_stats,
+            'shootout': self.get_player_shootout_stats,
+            'timeonice': self.get_player_timeonice_stats
         }
         
         for stat_type, method in endpoints.items():
@@ -1172,4 +1253,41 @@ class NHLAPIClient:
             return df
         except Exception as e:
             print(f"Error fetching skater powerplay stats: {e}")
+            return pd.DataFrame()
+    
+    def get_skater_penalty_stats(self, season: str = "20232024", limit: int = 100) -> pd.DataFrame:
+        """
+        Get penalty skater statistics for a season
+        
+        Args:
+            season: Season in format '20232024'
+            limit: Maximum number of players to fetch
+        
+        Returns:
+            DataFrame with penalty skater statistics
+        """
+        print(f"Fetching penalty skater stats for season {season}...")
+        
+        url = f"{self.stats_url}/skater/penalties"
+        params = {
+            'cayenneExp': f'seasonId={season}',
+            'limit': limit,
+            'start': 0
+        }
+        
+        try:
+            data = self._make_request(url, params)
+            
+            if 'data' not in data:
+                print("Failed to get penalty skater data")
+                return pd.DataFrame()
+            
+            df = pd.DataFrame(data['data'])
+            if not df.empty:
+                df['season'] = season
+                print(f"Successfully retrieved {len(df)} penalty skater records")
+            
+            return df
+        except Exception as e:
+            print(f"Error fetching skater penalty stats: {e}")
             return pd.DataFrame() 

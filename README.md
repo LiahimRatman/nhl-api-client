@@ -97,6 +97,15 @@ penalty_stats = client.get_player_penalty_stats(player_id, season_id)
 # Get faceoff statistics
 faceoff_stats = client.get_player_faceoff_stats(player_id, season_id)
 
+# Get penalty kill statistics
+penaltykill_stats = client.get_player_penaltykill_stats(player_id, season_id)
+
+# Get shootout statistics
+shootout_stats = client.get_player_shootout_stats(player_id, season_id)
+
+# Get time on ice statistics
+timeonice_stats = client.get_player_timeonice_stats(player_id, season_id)
+
 # Get comprehensive stats from multiple endpoints
 all_stats = client.get_comprehensive_player_stats(player_id, season_id)
 ```
@@ -116,6 +125,7 @@ penalty_stats = client.get_skater_penalty_stats(season_id, limit=500)
 faceoff_stats = client.get_skater_faceoff_stats(season_id, limit=500)
 shootout_stats = client.get_skater_shootout_stats(season_id, limit=500)
 timeonice_stats = client.get_skater_timeonice_stats(season_id, limit=500)
+bios_stats = client.get_skater_bios(season_id, limit=500)
 ```
 
 ### Goalie Statistics
@@ -209,6 +219,9 @@ print(f"Assists: {stats['summary']['assists']}")
 print(f"Points: {stats['summary']['points']}")
 print(f"Hits: {stats['realtime']['hits']}")
 print(f"Power Play Goals: {stats['powerplay']['powerPlayGoals']}")
+print(f"Penalty Kill Time: {stats['penaltykill']['timeOnIcePerGame']}")
+print(f"Shootout Attempts: {stats['shootout']['shootoutAttempts']}")
+print(f"Time on Ice: {stats['timeonice']['timeOnIcePerGame']}")
 ```
 
 ### Example 2: Team Comparison
