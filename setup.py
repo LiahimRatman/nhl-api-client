@@ -15,7 +15,7 @@ with open("requirements.txt", "r", encoding="utf-8") as fh:
 
 setup(
     name="nhl-stats-api-client",
-    version="1.0.2",
+    version="1.0.3",
     author="Mikhail Korotkov",
     author_email="ma.korotkov.eu@gmail.com",
     description="A comprehensive Python client for accessing NHL statistics and data",
